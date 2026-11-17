@@ -1,0 +1,13 @@
+<section class="cartao estreito">
+  <h2>Criar conta</h2>
+  @if (erro()) {
+    <p class="erro" id="mensagem-erro">{{ erro() }}</p>
+  }
+  <form [formGroup]="form" (ngSubmit)="cadastrar()">
+    <label>Nome <input id="campo-nome" type="text" formControlName="nome" /></label>
+    <label>E-mail <input id="campo-email" type="email" formControlName="email" /></label>
+    <label>Senha (mínimo 6 caracteres) <input id="campo-senha" type="password" formControlName="senha" /></label>
+    <button type="submit" id="btn-cadastrar" [disabled]="form.invalid">Cadastrar</button>
+  </form>
+  <p>Já tem conta? <a routerLink="/login">Entrar</a></p>
+</section>

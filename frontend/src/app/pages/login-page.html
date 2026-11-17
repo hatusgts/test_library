@@ -1,0 +1,12 @@
+<section class="cartao estreito">
+  <h2>Entrar</h2>
+  @if (erro()) {
+    <p class="erro" id="mensagem-erro">{{ erro() }}</p>
+  }
+  <form [formGroup]="form" (ngSubmit)="entrar()">
+    <label>E-mail <input id="campo-email" type="email" formControlName="email" /></label>
+    <label>Senha <input id="campo-senha" type="password" formControlName="senha" /></label>
+    <button type="submit" id="btn-entrar" [disabled]="form.invalid">Entrar</button>
+  </form>
+  <p>Não tem conta? <a routerLink="/cadastro" id="link-cadastro">Cadastre-se</a></p>
+</section>

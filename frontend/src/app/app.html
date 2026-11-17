@@ -1,0 +1,17 @@
+<header class="topo">
+  <h1>Livraria</h1>
+  @if (auth.logado()) {
+    <nav>
+      <a routerLink="/livros" routerLinkActive="ativo">Livros</a>
+      <a routerLink="/clientes" routerLinkActive="ativo">Clientes</a>
+      <a routerLink="/usuarios" routerLinkActive="ativo">Usuários</a>
+    </nav>
+    <div class="sessao">
+      <span id="usuario-logado">{{ auth.nome() }}</span>
+      <button type="button" id="btn-sair" (click)="auth.logout()">Sair</button>
+    </div>
+  }
+</header>
+<main>
+  <router-outlet />
+</main>

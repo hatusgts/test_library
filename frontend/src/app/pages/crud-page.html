@@ -1,0 +1,55 @@
+<section class="cartao">
+  <h2>{{ config.titulo }}</h2>
+  @if (erro()) {
+    <p class="erro" id="mensagem-erro">{{ erro() }}</p>
+  }
+  <form [formGroup]="form" (ngSubmit)="salvar()">
+    @for (campo of config.campos; track campo.chave) {
+      <label>
+        {{ campo.rotulo }}
+        <input
+          [id]="'campo-' + campo.chave"
+          [type]="campo.tipo"
+          [attr.step]="campo.tipo === 'number' ? 'any' : null"
+          [formControlName]="campo.chave"
+        />
+      </label>
+    }
+    <div class="acoes">
+      <button type="submit" id="btn-salvar" [disabled]="form.invalid">
+        {{ editandoId() === null ? 'Cadastrar' : 'Atualizar' }}
+      </button>
+      @if (editandoId() !== null) {
+        <button type="button" id="btn-cancelar" class="secundario" (click)="cancelar()">Cancelar</button>
+      }
+    </div>
+  </form>
+
+  <table id="tabela">
+    <thead>
+      <tr>
+        @for (coluna of colunas; track coluna.chave) {
+          <th>{{ coluna.rotulo }}</th>
+        }
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (registro of registros(); track registro.id) {
+        <tr>
+          @for (coluna of colunas; track coluna.chave) {
+            <td>{{ registro[coluna.chave] }}</td>
+          }
+          <td class="acoes">
+            <button type="button" class="editar" (click)="editar(registro)">Editar</button>
+            <button type="button" class="excluir perigo" (click)="excluir(registro)">Excluir</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td [attr.colspan]="colunas.length + 1">Nenhum registro cadastrado</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</section>

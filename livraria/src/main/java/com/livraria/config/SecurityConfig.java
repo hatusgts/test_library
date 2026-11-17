@@ -24,10 +24,9 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(a -> a
-                        .requestMatchers("/api/auth/login", "/h2-console/**").permitAll()
+                        .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll()
                         .anyRequest().authenticated())
-                .headers(h -> h.frameOptions(f -> f.sameOrigin()))
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }

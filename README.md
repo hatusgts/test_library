@@ -74,8 +74,9 @@ E2E com Selenium (7), que precisam da API e do front-end rodando:
 
 ```bash
 cd livraria
-./mvnw test -Pe2e
-./mvnw test -Pe2e -De2e.headless=false   # com o navegador visível
+./mvnw test -Pe2e                        # abre o Chrome
+./mvnw test -Pe2e -De2e.headless=true   # sem abrir o navegador
+./mvnw test -Pe2e -De2e.pausa=1500      # pausa em ms entre as ações (padrão 800)
 ```
 
 Os testes ficam em livraria/src/test/java/com/livraria/, nas pastas service (unitários), api (REST-assured) e e2e (Selenium).

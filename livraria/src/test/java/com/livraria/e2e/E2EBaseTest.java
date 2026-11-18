@@ -21,6 +21,9 @@ abstract class E2EBaseTest {
     protected static final String SENHA = "123456";
     private static final String URL_BASE = System.getProperty("e2e.url", "http://localhost:4200");
 
+    private static final boolean HEADLESS = "true".equals(System.getProperty("e2e.headless"));
+    private static final long PAUSA_MS = Long.getLong("e2e.pausa", HEADLESS ? 0 : 800);
+
     protected WebDriver driver;
     protected WebDriverWait espera;
 
@@ -28,7 +31,7 @@ abstract class E2EBaseTest {
     void abrirNavegador() {
         ChromeOptions opcoes = new ChromeOptions();
         opcoes.addArguments("--window-size=1366,900", "--no-sandbox", "--remote-allow-origins=*");
-        if (!"false".equals(System.getProperty("e2e.headless"))) {
+        if (HEADLESS) {
             opcoes.addArguments("--headless=new");
         }
         driver = new ChromeDriver(opcoes);
@@ -37,8 +40,17 @@ abstract class E2EBaseTest {
 
     @AfterEach
     void fecharNavegador() {
+        pausar(PAUSA_MS * 2);
         if (driver != null) {
             driver.quit();
+        }
+    }
+
+    protected void pausar(long milissegundos) {
+        try {
+            Thread.sleep(milissegundos);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -48,6 +60,7 @@ abstract class E2EBaseTest {
 
     protected void abrir(String caminho) {
         driver.get(URL_BASE + caminho);
+        pausar(PAUSA_MS);
     }
 
     protected WebElement campo(String id) {
@@ -56,10 +69,13 @@ abstract class E2EBaseTest {
 
     protected void preencher(String id, String valor) {
         campo(id).sendKeys(Keys.chord(Keys.CONTROL, "a"), valor);
+        pausar(PAUSA_MS);
     }
 
     protected void clicar(String id) {
+        pausar(PAUSA_MS);
         espera.until(ExpectedConditions.elementToBeClickable(By.id(id))).click();
+        pausar(PAUSA_MS);
     }
 
     protected By linha(String texto) {
@@ -68,13 +84,16 @@ abstract class E2EBaseTest {
 
     protected void aguardarLinha(String texto) {
         espera.until(ExpectedConditions.visibilityOfElementLocated(linha(texto)));
+        pausar(PAUSA_MS);
     }
 
     protected void aguardarSemLinha(String texto) {
         espera.until(ExpectedConditions.invisibilityOfElementLocated(linha(texto)));
+        pausar(PAUSA_MS);
     }
 
     protected void clicarNaLinha(String texto, String classeBotao) {
+        pausar(PAUSA_MS);
         espera.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//table[@id='tabela']//tr[td[normalize-space()='" + texto + "']]//button[contains(@class,'"
                         + classeBotao + "')]"))).click();
